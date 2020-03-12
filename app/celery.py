@@ -13,7 +13,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'hold': {
         'task': 'account.tasks.hold',
-        'schedule': 60.0,
+        'schedule': 600.0,
     },
 }
 
