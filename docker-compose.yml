@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  redis:
+    image: redis
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - 80:80
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    expose:
+      - 8000
+    depends_on:
+      - redis
+  celery:
+    build: .
+    command: celery -A app worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  celery-beat:
+    build: .
+    command: celery -A app beat
+    volumes:
+    - .:/app
+    depends_on:
+      - redis
+
